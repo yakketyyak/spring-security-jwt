@@ -1,0 +1,14 @@
+image: maven:latest
+
+variables:
+  MAVEN_CLI_OPTS: "--batch-mode"
+
+build_job:
+  stage: build
+  script:
+    - mvn $MAVEN_CLI_OPTS compile
+
+test_job:
+  stage: test
+  script:
+    - mvn $MAVEN_CLI_OPTS test
