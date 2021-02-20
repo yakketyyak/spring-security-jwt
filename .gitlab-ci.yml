@@ -9,59 +9,7 @@ cache:
   paths:
     - .m2/repository/
 
-#Utiliser globalement ou par jobspackage bf.gov.dgi.core.library.common.endpoints.validators;
-
-
-import org.jsoup.Jsoup;
-import org.jsoup.safety.Whitelist;
-import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-import javax.validation.Constraint;
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
-import javax.validation.Payload;
-
-
-
-@Documented
-@Constraint(validatedBy = NoXSSContentConstraintValidator.class)
-@Target({ElementType.FIELD})
-@Retention(RetentionPolicy.RUNTIME)
-public @interface NoXSSContent {
-  String message() default "{NoXSSContent}";
-
-
-  Class<?>[] groups() default {};
-
-
-  Class<? extends Payload>[] payload() default {};
-}
-
-
-class NoXSSContentConstraintValidator implements ConstraintValidator<NoXSSContent, String> {
-
-  private NoXSSContent noXSSContent;
-
-  @Override
-  public void initialize(NoXSSContent noSafe) {
-    this.noXSSContent = noSafe;
-  }
-
-  @Override
-  public boolean isValid(String safeContent, ConstraintValidatorContext cxt) {
-
-    if (safeContent == null || safeContent.isBlank()) {
-      return true;
-    }
-
-
-    return Jsoup.isValid(safeContent, Whitelist.none());
-  }
-
-}
+#Utiliser globalement ou par jobs
 before_script:
   - echo 'JESUS EST BON'
   - eval $(ssh-agent -s)
@@ -69,7 +17,7 @@ before_script:
 build_job:
   stage: build
   script:
-    - mvn $MAVEN_CLI_OPTS compile
+    - mvn $MAVEN_CLI_OPTS clean install -B -DskipTests
   #artifacts pour les dépendances entre  les stages on partage le dossier target/ "*/target" dans le cas de multimodule
   artifacts:
     expire_in: 10 min
