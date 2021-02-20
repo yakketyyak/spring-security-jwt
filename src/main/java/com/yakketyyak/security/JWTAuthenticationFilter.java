@@ -48,7 +48,11 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 	protected void successfulAuthentication(HttpServletRequest req, HttpServletResponse res, FilterChain chain,
 			Authentication auth) throws IOException, ServletException {
 
+		UserDto creds = new ObjectMapper().readValue(req.getInputStream(), UserDto.class);
+
 		String token = JWT.create().withSubject(((User) auth.getPrincipal()).getUsername())
+				.withIssuedAt(new Date(System.currentTimeMillis())).withIssuer(creds.getUsername())
+				.withAudience(creds.getUsername())
 				.withExpiresAt(new Date(System.currentTimeMillis() + securityProperties.getExpirationDate()))
 				.sign(HMAC512(securityProperties.getSecret().getBytes()));
 		res.addHeader(securityProperties.getHeaderString(), securityProperties.getTokenPrefix() + token);
