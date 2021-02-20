@@ -2,13 +2,31 @@ image: maven:latest
 
 variables:
   MAVEN_CLI_OPTS: "--batch-mode"
+  MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
+  
+#pour le cache des dépendances de l'application
+cache:
+  paths:
+    - .m2/repository/
+
+#Utiliser globalement ou par jobs
+before_script:
+  - echo 'JESUS EST BON'
+  - eval $(ssh-agent -s)
 
 build_job:
   stage: build
   script:
     - mvn $MAVEN_CLI_OPTS compile
+  #artifacts pour les dépendances entre  les stages on partage le dossier target/ "*/target" dans le cas de multimodule
+  artifacts:
+    expire_in: 10 min
+    paths: 
+      - target/ 
+      - "*/target"
 
 test_job:
   stage: test
   script:
+    - find . -name "*.class" -exec touch {} \+ #Eviter de recompiler les classes
     - mvn $MAVEN_CLI_OPTS test
