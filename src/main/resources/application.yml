@@ -5,7 +5,7 @@ spring:
       host: 127.0.0.1
       port: 8200
       scheme: http
-      token: s.TIiC7OOCp89euF885B2R9LBA
+      token: ${VAULT_TOKEN}
       connection-timeout: 5000
       read-timeout: 15000
   config:

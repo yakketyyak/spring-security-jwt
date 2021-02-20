@@ -1,8 +1,5 @@
 package com.yakketyyak;
 
-import javax.annotation.PostConstruct;
-
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -21,14 +18,6 @@ public class SpringBootJwtApplication {
 	@Bean
 	public BCryptPasswordEncoder bCryptPasswordEncoder() {
 		return new BCryptPasswordEncoder();
-	}
-
-	@Value("${secret}")
-	String password;
-
-	@PostConstruct
-	private void postConstruct() {
-		System.out.println("My password is: " + password);
 	}
 
 }
