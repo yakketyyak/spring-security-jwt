@@ -1,20 +1,20 @@
 spring:
-  datasource:
-    url: jdbc:mysql://localhost:3306/jwt_security
-    username: root
-    password: root
-    driver-class-name: org.mariadb.jdbc.Driver
-    type: com.zaxxer.hikari.HikariDataSource
-    hikari:
-      max-lifetime: 1200000
-      validation-timeout: 300000
-      maximum-pool-size: 10
-      
-      
-security:
-  jwt:
-   secret: zZrq0sZK1yt9RJk51RTJ/jeU6WERbvr8nqKMWQJRX1E=
-   expiration-date: 3600000
-   token-prefix: Bearer 
-   header-string: Authorization
-   signup-url: /users/signup
+  cloud:
+    vault:
+      authentication: TOKEN
+      host: 127.0.0.1
+      port: 8200
+      scheme: http
+      token: s.TIiC7OOCp89euF885B2R9LBA
+      connection-timeout: 5000
+      read-timeout: 15000
+  config:
+    import: vault://secret/${spring.application.name}/
+  application:
+    name: spring-jwt
+  profiles:
+    active:
+    - '@spring.profiles.active@'
+
+server:
+  port: 8081

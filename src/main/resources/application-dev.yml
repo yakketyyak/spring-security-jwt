@@ -1,0 +1,25 @@
+spring:
+  datasource:
+    url: ${db_url}
+    username: ${username}
+    password: ${password}
+    driver-class-name: org.mariadb.jdbc.Driver
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      max-lifetime: 1200000
+      validation-timeout: 300000
+      maximum-pool-size: 10
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MariaDBDialect
+  config:
+    import: vault://secret/${spring.application.name}/dev
+      
+security:
+  jwt:
+   secret: ${secret}
+   expiration-date: 3600000
+   token-prefix: Bearer 
+   header-string: Authorization
+   signup-url: /users/signup
